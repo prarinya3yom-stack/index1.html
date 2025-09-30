@@ -2,106 +2,131 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ยอดถอนล่าสุด</title>
+  <title>รายงานผลอันดับการถอนเงิน</title>
   <style>
     body {
-      background: url("bg.jpg") no-repeat center center fixed;
-      background-size: cover;
       font-family: Tahoma, sans-serif;
+      background: #f5f5f5; /* พื้นหลังขาวอ่อน */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
     }
     .container {
       max-width: 600px;
-      margin: 40px auto;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      padding: 20px;
-      color: white;
+      margin: 30px;
     }
     h2 {
       text-align: center;
-      background: red;
-      padding: 10px;
+      background: linear-gradient(to right, #0055aa, #00aaff);
+      padding: 12px;
       border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 20px;
       color: #fff;
     }
-    .table-wrapper {
-      max-height: 300px;
-      overflow-y: auto;
-      margin-top: 15px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    table thead {
-      background: red;
+    .card {
+      display: flex;
+      align-items: center;
+      background: #222;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      animation: slideIn 0.5s ease;
       color: #fff;
-      position: sticky;
-      top: 0;
     }
-    table th, table td {
-      padding: 8px;
-      text-align: center;
-      border-bottom: 1px solid #666;
+    .card img {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      border-radius: 8px;
+      background: white;
+      padding: 5px;
     }
-    .amount {
+    .card .info {
+      flex: 1;
+    }
+    .card .info .user {
       font-weight: bold;
-      color: yellow;
+      color: #00ccff;
+      margin-bottom: 4px;
+    }
+    .card .info .amount {
+      color: #00ffcc;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    .card .info .date {
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    @keyframes slideIn {
+      from {opacity: 0; transform: translateY(-15px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>ยอดถอนล่าสุด</h2>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>ธนาคาร</th>
-            <th>ยูสเซอร์</th>
-            <th>วันที่</th>
-            <th>ยอดถอน</th>
-          </tr>
-        </thead>
-        <tbody id="withdraw-feed">
-        </tbody>
-      </table>
-    </div>
+    <h2>รายงานผลอันดับการถอนเงิน</h2>
+    <div id="feed"></div>
   </div>
 
   <script>
-    const data = [
-      { bank: "กรุงศรีอยุธยา", user: "007857XXXX" },
-      { bank: "ไทยพาณิชย์", user: "096310XXXX" },
-      { bank: "กสิกรไทย", user: "089542XXXX" },
-      { bank: "กรุงเทพ", user: "082145XXXX" },
-      { bank: "กรุงไทย", user: "093258XXXX" }
+    const banks = [
+      { name: "ไทยพาณิชย์", logo: "https://contents.bu.ac.th/contents/images/mous/329753f9-5166-4d9b-911d-d78859cbb023.jpg" },
+      { name: "กสิกรไทย", logo: "https://image.tnews.co.th/uploads/images/contents/w1024/2025/01/CxaKtWLdkIgsdkMFfda3.webp?x-image-process=style/lg-webp" },
+      { name: "กรุงศรีอยุธยา", logo: "https://play-lh.googleusercontent.com/ovSLL4E--Mo_nJg4XHE8k_9KYCpAbn6FB0FLMgzl6lyNubIJoJxdvWyEnM7sN02DD5I" },
+      { name: "กรุงไทย", logo: "https://i.pinimg.com/564x/b0/00/4d/b0004d7dd5cdad9d628e681c703b2b8f.jpg" },
+      { name: "กรุงเทพ", logo: "https://i.pinimg.com/736x/b2/35/78/b23578de1944cbc97f20d9a54f50bf0e.jpg" },
+      { name: "TTB", logo: "https://yt3.googleusercontent.com/3dBlzJjG6u8sZZ5u26CAAH3GoAd1A1pjM5HKySIOjtf2JGGvV-0pE58Yynhbx_MrsJAME-3tbQM=s900-c-k-c0x00ffffff-no-rj" }
     ];
 
+    function randomUser() {
+      return "xxxx" + Math.floor(1000 + Math.random() * 9000) + "xx";
+    }
+
     function randomAmount() {
-      return (Math.floor(Math.random() * 5000) + 500).toLocaleString() + ".00";
+      return (Math.floor(Math.random() * 9000) + 300).toLocaleString() + ".00";
     }
 
-    function addNewRow() {
-      const tableBody = document.getElementById("withdraw-feed");
-      let d = data[Math.floor(Math.random() * data.length)];
-      let today = new Date().toLocaleDateString("th-TH");
-      let row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${d.bank}</td>
-        <td>${d.user}</td>
-        <td>${today}</td>
-        <td class="amount">${randomAmount()}</td>
+    function getDateTime() {
+      let now = new Date();
+      let d = now.toLocaleDateString("th-TH");
+      let t = now.toLocaleTimeString("th-TH");
+      return `${d} ${t}`;
+    }
+
+    function addCard() {
+      const feed = document.getElementById("feed");
+      const bank = banks[Math.floor(Math.random() * banks.length)];
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <img src="${bank.logo}" alt="${bank.name}">
+        <div class="info">
+          <div class="user">ยูส: ${randomUser()}</div>
+          <div class="amount">ยอดถอน: ${randomAmount()} บาท</div>
+          <div class="date">วันที่: ${getDateTime()}</div>
+        </div>
       `;
-      tableBody.appendChild(row);
+      feed.insertBefore(card, feed.firstChild);
 
-     
-      const wrapper = document.querySelector(".table-wrapper");
-      wrapper.scrollTop = wrapper.scrollHeight;
+      // เก็บล่าสุดแค่ 5 รายการ
+      if (feed.childNodes.length > 5) {
+        feed.removeChild(feed.lastChild);
+      }
     }
 
-    setInterval(addNewRow, 2000);
-    addNewRow();
+    // แสดง 5 รายการแรกทันที
+    for (let i = 0; i < 5; i++) {
+      addCard();
+    }
+
+    // อัพเดททุก 2 วิ
+    setInterval(addCard, 2000);
   </script>
 </body>
 </html>
