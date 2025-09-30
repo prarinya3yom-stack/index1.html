@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ยอดถอนล่าสุด</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Prompt", sans-serif;
+      background: url("https://picsum.photos/1600/900?blur=2") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    .table-container {
+      background: rgba(0, 0, 0, 0.6); /* ดำโปร่งใส */
+      border-radius: 12px;
+      padding: 20px;
+      margin: 40px auto;
+      max-width: 800px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .title {
+      background: rgba(255, 0, 0, 0.9);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      display: inline-block;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: rgba(255, 0, 0, 0.9);
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 15px;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .amount {
+      color: yellow;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="table-container">
+    <div class="title">ยอดถอนล่าสุด</div>
+    <table>
+      <thead>
+        <tr>
+          <th>ธนาคาร</th>
+          <th>ยูสเซอร์</th>
+          <th>วันที่</th>
+          <th>ยอดถอน</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>กรุงศรีอยุธยา</td>
+          <td>007857XXXX</td>
+          <td>1/10/2568</td>
+          <td class="amount">3,157.00</td>
+        </tr>
+        <tr>
+          <td>ไทยพาณิชย์</td>
+          <td>096310XXXX</td>
+          <td>1/10/2568</td>
+          <td class="amount">3,610.00</td>
+        </tr>
+        <tr>
+          <td>ไทยพาณิชย์</td>
+          <td>029102XXXX</td>
+          <td>1/10/2568</td>
+          <td class="amount">4,717.00</td>
+        </tr>
+        <tr>
+          <td>กรุงศรีอยุธยา</td>
+          <td>004878XXXX</td>
+          <td>1/10/2568</td>
+          <td class="amount">1,873.00</td>
+        </tr>
+        <tr>
+          <td>ไทยพาณิชย์</td>
+          <td>098975XXXX</td>
+          <td>1/10/2568</td>
+          <td class="amount">708.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
