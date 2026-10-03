@@ -1,135 +1,682 @@
+<iframe
+srcdoc='
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>รายงานผลอันดับการถอนเงิน</title>
-  <style>
-  body {
-    font-family: Tahoma, sans-serif;
-    background: transparent; /* โปร่งใส */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-  }
-  .container {
-    width: 100%;        /* ใช้เกือบเต็มจอ */
-    max-width: 1200px; /* กำหนดไม่ให้มันใหญ่เกินไป */
-    margin: 30px auto;
-  }
-  h2 {
-    text-align: center;
-    background: linear-gradient(to right, #0055aa, #00aaff);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 20px;
-    color: #fff;
-  }
-  .card {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    background: rgba(34, 34, 34, 0.85); /* โปร่งใสนิดๆ */
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    animation: slideIn 0.5s ease;
-    color: #fff;
-  }
-  .card img {
-    width: 50px;
-    height: 50px;
-    margin-right: 15px;
-    border-radius: 8px;
-    background: white;
-    padding: 5px;
-  }
-  .card .info {
-    flex: 1;
-  }
-  .card .info .user {
-    font-weight: bold;
-    color: #00ccff;
-    margin-bottom: 4px;
-  }
-  .card .info .amount {
-    color: #00ffcc;
-    font-size: 16px;
-    margin-bottom: 4px;
-  }
-  .card .info .date {
-    font-size: 13px;
-    color: #ccc;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#080700;
+  color:#fff;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+}
+
+.wrapper{
+  padding:10px 12px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+  border:1px solid #927300;
+  border-radius:25px;
+  padding:18px;
+  margin-bottom:16px;
+  background:linear-gradient(
+    145deg,
+    #191600,
+    #090800
+  );
+  box-shadow:
+    inset 0 0 15px rgba(255,210,0,.04),
+    0 0 6px rgba(255,190,0,.18);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.title{
+  font-size:21px;
+  font-weight:700;
+}
+
+.subtitle{
+  color:#c5a994;
+  font-size:13px;
+  margin-top:7px;
+}
+
+.dot{
+  display:inline-block;
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  background:#2cff6a;
+  box-shadow:0 0 13px #2cff6a;
+  margin-right:9px;
+  vertical-align:-1px;
+}
+
+.live{
+  float:right;
+  border:1px solid #a76800;
+  border-radius:18px;
+  padding:9px 14px;
+  font-size:13px;
+}
+
+.live span{
+  color:#2cff6a;
+  margin-right:5px;
+}
+
+/* =========================
+   TOTAL
+========================= */
+
+.amount-box{
+  margin-top:18px;
+  border:1px solid #927300;
+  border-radius:22px;
+  padding:20px 22px;
+}
+
+.amount{
+  font-size:36px;
+  font-weight:700;
+  color:#ffe000;
+  letter-spacing:.2px;
+  transition:opacity .2s;
+}
+
+.current-time{
+  margin-top:27px;
+  font-size:13px;
+}
+
+.plus{
+  float:right;
+  border:1px solid #927300;
+  border-radius:15px;
+  padding:9px 14px;
+  color:#ffe000;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.clear{
+  clear:both;
+}
+
+/* =========================
+   TRANSACTIONS
+========================= */
+
+.transaction{
+  border:1px solid #695600;
+  border-radius:18px;
+  padding:12px 14px;
+  margin-top:10px;
+  background:#0d0c06;
+  font-size:13px;
+  line-height:1.5;
+
+  animation:
+    slideIn .45s ease;
+}
+
+@keyframes slideIn{
+  from{
+    opacity:0;
+    transform:translateY(-10px);
   }
 
-  @keyframes slideIn {
-    from {opacity: 0; transform: translateY(-15px);}
-    to {opacity: 1; transform: translateY(0);}
+  to{
+    opacity:1;
+    transform:translateY(0);
   }
+}
+
+.logo{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  float:left;
+  margin-right:12px;
+
+  background:#162e91;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:20px;
+  font-weight:bold;
+  color:#fff;
+
+  box-shadow:
+    0 0 5px rgba(50,90,255,.5);
+}
+
+.info{
+  overflow:hidden;
+}
+
+.money{
+  color:#ffe000;
+  font-weight:bold;
+}
+
+.success{
+  float:right;
+
+  color:#8aff9b;
+  background:#123919;
+
+  border:1px solid #245e2d;
+
+  border-radius:12px;
+
+  padding:3px 8px;
+
+  font-size:10px;
+}
+
+/* =========================
+   DEMO LABEL
+========================= */
+
+.demo{
+  text-align:center;
+  color:#75684f;
+  font-size:9px;
+  margin-top:8px;
+}
+
 </style>
 </head>
+
+
 <body>
-  <div class="container">
-    <h2>รายงานผลอันดับการถอนเงิน</h2>
-    <div id="feed"></div>
+
+<div class="wrapper">
+
+  <!-- =====================
+       TOTAL CARD
+  ====================== -->
+
+  <div class="card">
+
+    <div class="title">
+
+      <span class="dot"></span>
+
+      ยอดโบนัสสะสม
+
+      <span class="live">
+        <span>●</span>LIVE
+      </span>
+
+    </div>
+
+
+    <div class="subtitle">
+      อัปเดตอัตโนมัติ • ข้อมูลตัวอย่าง
+    </div>
+
+
+    <div class="amount-box">
+
+      <div
+        class="amount"
+        id="total"
+      >
+        7,419,900.71 ฿
+      </div>
+
+
+      <div class="current-time">
+
+        เวลาปัจจุบัน:
+        <b id="clock">00:00:00</b>
+
+
+        <span
+          class="plus"
+          id="plus"
+        >
+          +963 ฿
+        </span>
+
+      </div>
+
+
+      <div class="clear"></div>
+
+    </div>
+
   </div>
 
-  <script>
-    const banks = [
-      { name: "ไทยพาณิชย์", logo: "https://contents.bu.ac.th/contents/images/mous/329753f9-5166-4d9b-911d-d78859cbb023.jpg" },
-      { name: "กสิกรไทย", logo: "https://image.tnews.co.th/uploads/images/contents/w1024/2025/01/CxaKtWLdkIgsdkMFfda3.webp?x-image-process=style/lg-webp" },
-      { name: "กรุงศรีอยุธยา", logo: "https://play-lh.googleusercontent.com/ovSLL4E--Mo_nJg4XHE8k_9KYCpAbn6FB0FLMgzl6lyNubIJoJxdvWyEnM7sN02DD5I" },
-      { name: "กรุงไทย", logo: "https://i.pinimg.com/564x/b0/00/4d/b0004d7dd5cdad9d628e681c703b2b8f.jpg" },
-      { name: "กรุงเทพ", logo: "https://i.pinimg.com/736x/b2/35/78/b23578de1944cbc97f20d9a54f50bf0e.jpg" },
-      { name: "TTB", logo: "https://yt3.googleusercontent.com/3dBlzJjG6u8sZZ5u26CAAH3GoAd1A1pjM5HKySIOjtf2JGGvV-0pE58Yynhbx_MrsJAME-3tbQM=s900-c-k-c0x00ffffff-no-rj" }
+
+  <!-- =====================
+       TRANSACTION CARD
+  ====================== -->
+
+  <div class="card">
+
+    <div class="title">
+
+      <span class="dot"></span>
+
+      รายการถอนล่าสุด
+
+    </div>
+
+
+    <div class="subtitle">
+      AUTO SYSTEM • อัปเดตต่อเนื่อง
+    </div>
+
+
+    <div id="transactions"></div>
+
+  </div>
+
+
+  <div class="demo">
+    DEMO DATA
+  </div>
+
+</div>
+
+
+
+<script>
+
+/* ==========================================
+   SETTINGS
+========================================== */
+
+let total = 7419900.71;
+
+/* ระยะเวลา animation ของยอด */
+const smoothDuration = 2500;
+
+/* เพิ่มรายการทุกกี่ ms */
+const updateInterval = 3000;
+
+
+/* ==========================================
+   USERS
+========================================== */
+
+const users = [
+
+  "xxxx675260xxxx",
+  "xxxx370922xxxx",
+  "xxxx9912xxxx",
+  "xxxx187710xxxx",
+  "xxxx542681xxxx",
+  "xxxx428916xxxx",
+  "xxxx763521xxxx",
+  "xxxx318925xxxx"
+
+];
+
+
+/* ==========================================
+   FORMAT MONEY
+========================================== */
+
+function formatMoney(number){
+
+  return number.toLocaleString(
+    "th-TH",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+/* ==========================================
+   RANDOM WITHDRAW
+========================================== */
+
+function randomAmount(){
+
+  return Math.floor(
+    Math.random() * 12000
+  ) + 1000;
+
+}
+
+
+/* ==========================================
+   SMOOTH NUMBER ANIMATION
+========================================== */
+
+function smoothIncrease(
+  targetTotal,
+  duration
+){
+
+  const startTotal = total;
+
+  const difference =
+    targetTotal - startTotal;
+
+  const startTime =
+    performance.now();
+
+
+  function animate(currentTime){
+
+    const elapsed =
+      currentTime - startTime;
+
+
+    let progress =
+      Math.min(
+        elapsed / duration,
+        1
+      );
+
+
+    /*
+      Ease In Out
+      ทำให้เริ่มช้า
+      กลางเร็ว
+      จบช้า
+    */
+
+    const ease =
+      progress < 0.5
+
+      ? 2 * progress * progress
+
+      : 1 -
+        Math.pow(
+          -2 * progress + 2,
+          2
+        ) / 2;
+
+
+    const currentValue =
+      startTotal +
+      difference * ease;
+
+
+    document
+      .getElementById("total")
+      .textContent =
+        formatMoney(currentValue)
+        + " ฿";
+
+
+    if(progress < 1){
+
+      requestAnimationFrame(
+        animate
+      );
+
+    }else{
+
+      total =
+        targetTotal;
+
+    }
+
+  }
+
+
+  requestAnimationFrame(
+    animate
+  );
+
+}
+
+
+/* ==========================================
+   UPDATE TOTAL
+========================================== */
+
+function updateTotal(){
+
+  const add =
+    Math.floor(
+      Math.random() * 1200
+    ) + 200;
+
+
+  const target =
+    total + add;
+
+
+  document
+    .getElementById("plus")
+    .textContent =
+      "+" +
+      add.toLocaleString("th-TH") +
+      " ฿";
+
+
+  smoothIncrease(
+    target,
+    smoothDuration
+  );
+
+}
+
+
+/* ==========================================
+   CLOCK
+========================================== */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+
+  const time =
+    now.toLocaleTimeString(
+      "th-TH",
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+
+  document
+    .getElementById("clock")
+    .textContent =
+      time;
+
+}
+
+
+/* ==========================================
+   CREATE TRANSACTION
+========================================== */
+
+function createTransaction(){
+
+  const user =
+    users[
+      Math.floor(
+        Math.random() *
+        users.length
+      )
     ];
 
-    function randomUser() {
-      return "xxxx" + Math.floor(1000 + Math.random() * 9000) + "xx";
-    }
 
-    function randomAmount() {
-      return (Math.floor(Math.random() * 50000) + 300).toLocaleString() + ".00";
-    }
+  const amount =
+    randomAmount();
 
-    function getDateTime() {
-      let now = new Date();
-      let d = now.toLocaleDateString("th-TH");
-      let t = now.toLocaleTimeString("th-TH");
-      return `${d} ${t}`;
-    }
 
-    function addCard() {
-      const feed = document.getElementById("feed");
-      const bank = banks[Math.floor(Math.random() * banks.length)];
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <img src="${bank.logo}" alt="${bank.name}">
-        <div class="info">
-          <div class="user">ยูส: ${randomUser()}</div>
-          <div class="amount">ยอดถอน: ${randomAmount()} บาท</div>
-          <div class="date">วันที่: ${getDateTime()}</div>
-        </div>
-      `;
-      feed.insertBefore(card, feed.firstChild);
+  const now =
+    new Date();
 
-      // เก็บล่าสุดแค่ 5 รายการ
-      if (feed.childNodes.length > 5) {
-        feed.removeChild(feed.lastChild);
+
+  const time =
+    now.toLocaleTimeString(
+      "th-TH",
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
       }
-    }
+    );
 
-    // แสดง 5 รายการแรกทันที
-    for (let i = 0; i < 5; i++) {
-      addCard();
-    }
 
-    // อัพเดททุก 2 วิ
-    setInterval(addCard, 2000);
-  </script>
+  const date =
+    now.toLocaleDateString(
+      "th-TH",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+
+
+  const div =
+    document.createElement("div");
+
+
+  div.className =
+    "transaction";
+
+
+  div.innerHTML = `
+
+    <div class="logo">
+      ฿
+    </div>
+
+    <div class="info">
+
+      ยูส: ${user}
+
+      <br>
+
+      ยอดถอน:
+      <span class="money">
+        ${amount.toLocaleString("th-TH")}
+        บาท
+      </span>
+
+      <br>
+
+      วันที่:
+      ${date}
+      ${time}
+
+      <span class="success">
+        สำเร็จ
+      </span>
+
+    </div>
+
+    <div class="clear"></div>
+
+  `;
+
+
+  const list =
+    document.getElementById(
+      "transactions"
+    );
+
+
+  list.prepend(div);
+
+
+  /*
+    จำกัดไว้ 5 รายการ
+  */
+
+  while(
+    list.children.length > 5
+  ){
+
+    list.removeChild(
+      list.lastChild
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   INITIAL DATA
+========================================== */
+
+updateClock();
+
+
+for(
+  let i = 0;
+  i < 5;
+  i++
+){
+
+  createTransaction();
+
+}
+
+
+/* ==========================================
+   CLOCK EVERY SECOND
+========================================== */
+
+setInterval(
+  updateClock,
+  1000
+);
+
+
+/* ==========================================
+   UPDATE EVERY 3 SECONDS
+========================================== */
+
+setInterval(
+  function(){
+
+    updateTotal();
+
+    createTransaction();
+
+  },
+  updateInterval
+);
+
+</script>
+
 </body>
 </html>
-
+'
+style="
+width:100%;
+height:1000px;
+border:0;
+display:block;
+"
+title="Demo UI">
+</iframe>
